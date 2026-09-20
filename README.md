@@ -27,6 +27,8 @@ cd qwen-27b-5090-nvfp4-kv
 bash setup.sh
 ```
 
+### Launcher
+
 ![Setup menu with install, download/resume, and start options](assets/setup-menu.png)
 
 Choose **1 — Set up everything** to install the runtime, apply the patch, and download **both the target model and DFlash2 from Hugging Face** at the pinned revisions. Expect about **22 GB of model weights**, plus runtime packages. The menu installs `uv` locally if needed and offers to install missing build tools on apt/dnf/pacman systems with your permission. It never changes your NVIDIA driver.

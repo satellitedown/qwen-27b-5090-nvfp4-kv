@@ -1,4 +1,4 @@
-# Fast Long Context
+# Fast Long Context Qwen 3.8 27b (Abliterated)
 
 **Qwen3.8-27B Abliterated on a single RTX 5090 (32 GB), with 256K context at ~240-300 tokens/s.**
 

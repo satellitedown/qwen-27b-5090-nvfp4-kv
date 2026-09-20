@@ -1,8 +1,8 @@
 # NVFP4 weights + KV, DFlash2, patched SGLang
 
-I could only reach **around 160K context** with Huihui Qwen3.8-27B before my **32 GB RTX 5090 ran out of VRAM**. The goal was to fit the full context window without giving up DFlash2 speculative decoding.
+I could only reach **around 160K context** with Huihui Qwen3.8-27B before my RTX 5090 ran out of VRAM. The goal is to fit the full context window without giving up DFlash2 speculative decoding speed boost.
 
-**NVFP4 target weights + NVFP4 KV + a small SGLang patch** made the full **262,144-token window** possible on the same card. Tested with a **260,000-token prompt**, leaving room for output. This is a runtime patch and deployment recipe, not a new model.
+**NVFP4 target weights + NVFP4 KV + a small SGLang patch** made the full **262,144-token window** possible on the same card. Tested with a 260,000-token prompt, leaving room for output. This is a runtime patch and deployment recipe, not a new model.
 
 ## Why was the patch needed?
 

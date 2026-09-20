@@ -1,21 +1,6 @@
-# NVFP4 weights + KV, DFlash2, patched SGLang
+# 256K Context at ~239 Tokens/s
 
-I could only reach **around 160K context** with Huihui Qwen3.8-27B (an abliterated model) before my RTX 5090 ran out of VRAM. The goal is to fit the full context window without giving up DFlash2 speculative decoding speed boost.
-
-**NVFP4 target weights + NVFP4 KV + a small SGLang patch** made the full **262,144-token window** possible on the same card. Tested with a 260,000-token prompt, leaving room for output. This is a runtime patch and deployment recipe, not a new model.
-
-## Why was the patch needed?
-
-Quantized weights alone do not solve long-context memory use. The pinned **SGLang 0.5.20** runtime had two blockers:
-
-1. **Native NVFP4 attention rejected speculative verification.** DFlash2 needs the target to verify a block of tokens, not just decode one. The patch adds causal masks and multi-token routing in `trtllm_mha_backend.py`, reusing FlashInfer's native NVFP4 kernel with CUDA graphs. Support is scoped to fixed-length, causal, top-1 verification.
-2. **Prefill exhausted VRAM despite the compressed cache fitting.** The old path gathered and dequantized the cached prefix into large temporary tensors. A new Triton kernel, `nvfp4_dequant.py`, gathers and converts directly into the shared FP8 prefill workspace, wired through the cache quantization and memory-pool code.
-
-**[Read the SGLang patch](patches/sglang-nvfp4-kv.patch)** · [Exact runtime/model pins](runtime-manifest.json) · [Launch settings](scripts/serve.sh)
-
-## Will it work on other hardware?
-
-**NVIDIA-only, built and tested for the RTX 5090 32 GB.** Other NVIDIA GPUs are untested. **No Apple, AMD, or CPU support.**
+**Qwen3.8-27B Abliterated on a single RTX 5090 (32 GB).**
 
 ## Run
 
@@ -36,6 +21,23 @@ Choose **1 — Set up everything** to install the runtime, apply the patch, and 
 Then choose **3 — Start the server**. Option **2** resumes model downloads if interrupted.
 
 First startup can take several minutes to compile kernels. The patch uses an isolated runtime copy, leaving global installations untouched. OpenAI-compatible endpoint: **`http://127.0.0.1:8000/v1`**, model **`qwen3.8-27b-abliterated-256k`**. No authentication: keep it on loopback. Stop with Ctrl-C.
+
+## Why was this needed?
+
+I could only reach **around 160K context** with Huihui Qwen3.8-27B (an abliterated model) before my RTX 5090 ran out of VRAM. The goal is to fit the full context window without giving up DFlash2 speculative decoding speed boost.
+
+**NVFP4 target weights + NVFP4 KV + a small SGLang patch** made the full **262,144-token window** possible on the same card. Tested with a 260,000-token prompt, leaving room for output. This is a runtime patch and deployment recipe, not a new model.
+
+Quantized weights alone do not solve long-context memory use. The pinned **SGLang 0.5.20** runtime had two blockers:
+
+1. **Native NVFP4 attention rejected speculative verification.** DFlash2 needs the target to verify a block of tokens, not just decode one. The patch adds causal masks and multi-token routing in `trtllm_mha_backend.py`, reusing FlashInfer's native NVFP4 kernel with CUDA graphs. Support is scoped to fixed-length, causal, top-1 verification.
+2. **Prefill exhausted VRAM despite the compressed cache fitting.** The old path gathered and dequantized the cached prefix into large temporary tensors. A new Triton kernel, `nvfp4_dequant.py`, gathers and converts directly into the shared FP8 prefill workspace, wired through the cache quantization and memory-pool code.
+
+**[Read the SGLang patch](patches/sglang-nvfp4-kv.patch)** · [Exact runtime/model pins](runtime-manifest.json) · [Launch settings](scripts/serve.sh)
+
+## Will it work on other hardware?
+
+**NVIDIA-only, built and tested for the RTX 5090 32 GB.** Other NVIDIA GPUs are untested. **No Apple, AMD, or CPU support.**
 
 ## Results and limits
 

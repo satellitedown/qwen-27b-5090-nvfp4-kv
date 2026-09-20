@@ -1,4 +1,4 @@
-qwen-27b-5090-nvfp4-kv
+Qwen 27B Long Context Launcher
 Runtime modifications, deployment scripts and experiment packaging
 Copyright 2026 satellitedown
 Licensed under Apache License 2.0; see LICENSE.
@@ -8,6 +8,7 @@ https://github.com/sgl-project/sglang, licensed under Apache License 2.0.
 Original copyright notices remain in the installed upstream files.
 Modified runtime files carry an additional modification notice.
 This distribution includes a patch, not a vendored SGLang source tree.
+The hash-pinned patch retains its original project-name notices.
 
 The runtime uses FlashInfer and NVIDIA CUDA/TensorRT-LLM attention kernels.
 Credit for native NVFP4 attention, quantization and speculative decoding

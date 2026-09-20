@@ -1,0 +1,343 @@
+{
+  "publication": {
+    "measurement_status": "historical; not rerun for publication",
+    "redaction": "Only historical quality check records, sandbox invocation, checker source and interpretation are retained. These synthetic check records contain no local user paths.",
+    "reproduction_note": "results/quality.json preserves historical checker source, sandbox command and outcomes as inert evidence. scripts/benchmark.py performs syntax compilation only and never executes generated output; it does not reproduce behavioral quality counts. Checks for superseded arms are retained, but their generated outputs are not published here."
+  },
+  "checks": [
+    {
+      "arm": "fp8-baseline",
+      "prompt_tokens": 8192,
+      "repeat": 1,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "fp8-baseline",
+      "prompt_tokens": 8192,
+      "repeat": 2,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "fp8-baseline",
+      "prompt_tokens": 32768,
+      "repeat": 1,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "fp8-baseline",
+      "prompt_tokens": 32768,
+      "repeat": 2,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "fp8-baseline",
+      "prompt_tokens": 122000,
+      "repeat": 1,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "fp8-baseline",
+      "prompt_tokens": 122000,
+      "repeat": 2,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-native-234k",
+      "prompt_tokens": 8192,
+      "repeat": 1,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-native-234k",
+      "prompt_tokens": 8192,
+      "repeat": 2,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-native-234k",
+      "prompt_tokens": 32768,
+      "repeat": 1,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-native-234k",
+      "prompt_tokens": 32768,
+      "repeat": 2,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-native-234k",
+      "prompt_tokens": 122000,
+      "repeat": 1,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-native-234k",
+      "prompt_tokens": 122000,
+      "repeat": 2,
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 8192,
+      "repeat": 1,
+      "completion_tokens": 777,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 8192,
+      "repeat": 2,
+      "completion_tokens": 777,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 32768,
+      "repeat": 1,
+      "completion_tokens": 644,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 32768,
+      "repeat": 2,
+      "completion_tokens": 644,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 122000,
+      "repeat": 1,
+      "completion_tokens": 1536,
+      "finish_reason": {
+        "type": "length",
+        "length": 1536
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 122000,
+      "repeat": 2,
+      "completion_tokens": 1513,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 196608,
+      "repeat": 1,
+      "completion_tokens": 360,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 196608,
+      "repeat": 2,
+      "completion_tokens": 360,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 260000,
+      "repeat": 1,
+      "completion_tokens": 647,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-fused-prefill",
+      "prompt_tokens": 260000,
+      "repeat": 2,
+      "completion_tokens": 1536,
+      "finish_reason": {
+        "type": "length",
+        "length": 1536
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-block6",
+      "prompt_tokens": 122000,
+      "repeat": 1,
+      "completion_tokens": 688,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-block6",
+      "prompt_tokens": 122000,
+      "repeat": 2,
+      "completion_tokens": 1473,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-block6",
+      "prompt_tokens": 260000,
+      "repeat": 1,
+      "completion_tokens": 1330,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"AssertionError: \", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-block6",
+      "prompt_tokens": 260000,
+      "repeat": 2,
+      "completion_tokens": 1536,
+      "finish_reason": {
+        "type": "length",
+        "length": 1536
+      },
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    exec(compile(payload[\"code\"],\"<generated>\",\"exec\"),ns)\n         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<generated>\", line 205\n    \"\"\"\n    ^\nSyntaxError: unterminated triple-quoted string literal (detected at line 206)\n"
+    },
+    {
+      "arm": "nvfp4-256k-block4",
+      "prompt_tokens": 260000,
+      "repeat": 1,
+      "completion_tokens": 954,
+      "finish_reason": {
+        "type": "stop",
+        "matched": 248046
+      },
+      "returncode": 0,
+      "stdout": "{\"expiry_boundary\": \"pass\", \"lru_eviction\": \"pass\", \"overwrite_refresh\": \"pass\", \"expired_mru_cleanup\": \"pass\", \"invalid_arguments\": \"pass\"}\n",
+      "stderr": ""
+    },
+    {
+      "arm": "nvfp4-256k-block4",
+      "prompt_tokens": 260000,
+      "repeat": 2,
+      "completion_tokens": 1536,
+      "finish_reason": {
+        "type": "length",
+        "length": 1536
+      },
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    exec(compile(payload[\"code\"],\"<generated>\",\"exec\"),ns)\n         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<generated>\", line 157\n    self.assertIsNone(self.cache2.get(\"b\n                                      ^\nSyntaxError: unterminated string literal (detected at line 157)\n"
+    }
+  ],
+  "sandbox_command": [
+    "/usr/bin/bwrap",
+    "--unshare-all",
+    "--die-with-parent",
+    "--new-session",
+    "--ro-bind",
+    "/usr",
+    "/usr",
+    "--symlink",
+    "usr/lib",
+    "/lib",
+    "--symlink",
+    "usr/lib",
+    "/lib64",
+    "--proc",
+    "/proc",
+    "--dev",
+    "/dev",
+    "--tmpfs",
+    "/tmp",
+    "--dir",
+    "/work",
+    "--chdir",
+    "/work",
+    "/usr/bin/python",
+    "-I",
+    "-c"
+  ],
+  "checker_source": "import sys,json,resource\nresource.setrlimit(resource.RLIMIT_CPU,(3,3))\nresource.setrlimit(resource.RLIMIT_AS,(512*1024*1024,512*1024*1024))\npayload=json.load(sys.stdin)\nns={\"__name__\":\"generated\"}\nexec(compile(payload[\"code\"],\"<generated>\",\"exec\"),ns)\nCache=ns[\"LRUCache\"]\nresults={}\ndef check(name, fn):\n    try:\n        fn()\n        results[name]=\"pass\"\n    except Exception as e:\n        results[name]=type(e).__name__+\": \"+str(e)\ndef expiry():\n    now=[0.0]; c=Cache(2,5,lambda:now[0]); c.put(\"a\",1); now[0]=4.999\n    assert c.get(\"a\")==1\n    now[0]=5; assert c.get(\"a\",\"missing\")==\"missing\"; assert len(c)==0\ndef lru():\n    c=Cache(2,10,lambda:0); c.put(\"a\",1); c.put(\"b\",2); assert c.get(\"a\")==1\n    c.put(\"c\",3); assert c.get(\"b\")==None; assert c.get(\"a\")==1; assert c.get(\"c\")==3; assert len(c)==2\ndef overwrite():\n    now=[0]; c=Cache(2,5,lambda:now[0]); c.put(\"a\",1); now[0]=4; c.put(\"a\",2)\n    now[0]=5; assert c.get(\"a\")==2; assert len(c)==1\n    now[0]=9; assert c.get(\"a\")==None; assert len(c)==0\ndef cleanup():\n    now=[0]; c=Cache(2,5,lambda:now[0]); c.put(\"a\",1); now[0]=3; c.put(\"b\",2); c.get(\"a\")\n    now[0]=5; c.put(\"c\",3); assert c.get(\"b\")==2; assert c.get(\"c\")==3; assert c.get(\"a\")==None; assert len(c)==2\ndef invalid():\n    for capacity,ttl in [(0,1),(-1,1),(1,0),(1,-1)]:\n        try: Cache(capacity,ttl,lambda:0)\n        except ValueError: continue\n        raise AssertionError((capacity,ttl))\nfor name,fn in [(\"expiry_boundary\",expiry),(\"lru_eviction\",lru),(\"overwrite_refresh\",overwrite),(\"expired_mru_cleanup\",cleanup),(\"invalid_arguments\",invalid)]:check(name,fn)\nprint(json.dumps(results))\n",
+  "interpretation": "One deterministic LRU/TTL coding task, five independent behavior checks. The paired FP8 comparison covers only 8192/32768/122000 inputs. Backend and KV dtype both change. Syntax failures with finish_reason=length are incomplete generations at the output cap, not isolated KV-quality evidence."
+}

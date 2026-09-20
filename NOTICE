@@ -1,0 +1,27 @@
+qwen-27b-5090-nvfp4-kv
+Runtime modifications, deployment scripts and experiment packaging
+Copyright 2026 satellitedown
+Licensed under Apache License 2.0; see LICENSE.
+
+The patch modifies SGLang, Copyright 2023-2024 SGLang Team,
+https://github.com/sgl-project/sglang, licensed under Apache License 2.0.
+Original copyright notices remain in the installed upstream files.
+Modified runtime files carry an additional modification notice.
+This distribution includes a patch, not a vendored SGLang source tree.
+
+The runtime uses FlashInfer and NVIDIA CUDA/TensorRT-LLM attention kernels.
+Credit for native NVFP4 attention, quantization and speculative decoding
+belongs to their respective upstream authors. This project integrates
+those capabilities and adds the documented verification/prefill changes.
+
+Model weights are NOT distributed or relicensed by this repository.
+Download them from the pinned original repositories in runtime-manifest.json:
+- Qwen team: Qwen3.8-27B base model.
+- Huihui AI: abliterated source checkpoint.
+- Gittensor Model Hub: RTX 5090 NVFP4 recipe/layout and LM head.
+- heswithme: Huihui/Gittensor-style NVFP4 checkpoint quantization and packaging.
+- NVIDIA: Model Optimizer.
+- Inco AI and the DFlash authors: Qwen3.8-27B-DFlash2 draft model.
+Both selected model cards declare Apache-2.0; consult their own licenses.
+This is an independent experiment, not an official release or endorsement
+by any of the organizations above.

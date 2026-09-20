@@ -1,0 +1,92 @@
+{
+  "publication": {
+    "measurement_status": "historical; not rerun for publication",
+    "redaction": "Only original numerical CUDA kernel proof fields are retained; no unrelated logs or filesystem paths. Values are unchanged."
+  },
+  "workspace_gather": [
+    {
+      "gather_tokens": 0,
+      "reference": "bit-exact finite BF16-to-FP8; NaNs equivalent",
+      "temporary_tensor_bytes": 0
+    },
+    {
+      "gather_tokens": 1,
+      "reference": "bit-exact finite BF16-to-FP8; NaNs equivalent",
+      "temporary_tensor_bytes": 0
+    },
+    {
+      "gather_tokens": 67,
+      "reference": "bit-exact finite BF16-to-FP8; NaNs equivalent",
+      "temporary_tensor_bytes": 0
+    },
+    {
+      "gather_tokens": 4097,
+      "reference": "bit-exact finite BF16-to-FP8; NaNs equivalent",
+      "temporary_tensor_bytes": 0
+    },
+    {
+      "gather_tokens": 260003,
+      "reference": "bit-exact finite BF16-to-FP8; NaNs equivalent",
+      "temporary_tensor_bytes": 0
+    }
+  ],
+  "native_attention": [
+    {
+      "lengths": [
+        67
+      ],
+      "query_tokens": 1,
+      "relative_rms_error": 0.003135944716632366,
+      "max_abs_error": 0.003932654857635498,
+      "cuda_graph_replay": "pass"
+    },
+    {
+      "lengths": [
+        8
+      ],
+      "query_tokens": 8,
+      "relative_rms_error": 0.0022275110241025686,
+      "max_abs_error": 0.01207733154296875,
+      "cuda_graph_replay": "pass"
+    },
+    {
+      "lengths": [
+        67,
+        131
+      ],
+      "query_tokens": 4,
+      "relative_rms_error": 0.003154193749651313,
+      "max_abs_error": 0.0036791563034057617,
+      "cuda_graph_replay": "pass"
+    },
+    {
+      "lengths": [
+        67,
+        131
+      ],
+      "query_tokens": 6,
+      "relative_rms_error": 0.0031880061142146587,
+      "max_abs_error": 0.0043901801109313965,
+      "cuda_graph_replay": "pass"
+    },
+    {
+      "lengths": [
+        67,
+        131
+      ],
+      "query_tokens": 8,
+      "relative_rms_error": 0.0032204187009483576,
+      "max_abs_error": 0.006425023078918457,
+      "cuda_graph_replay": "pass"
+    },
+    {
+      "lengths": [
+        1029
+      ],
+      "query_tokens": 8,
+      "relative_rms_error": 0.0037795323878526688,
+      "max_abs_error": 0.0011380016803741455,
+      "cuda_graph_replay": "pass"
+    }
+  ]
+}

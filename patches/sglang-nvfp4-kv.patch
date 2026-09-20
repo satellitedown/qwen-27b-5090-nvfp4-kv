@@ -1,0 +1,276 @@
+--- a/sglang/srt/layers/attention/trtllm_mha_backend.py
++++ b/sglang/srt/layers/attention/trtllm_mha_backend.py
+@@ -1,3 +1,5 @@
++# Modified for qwen-27b-5090-nvfp4-kv: native causal verification and fused prefill KV conversion.
++# Modifications Copyright 2026 satellitedown. SPDX-License-Identifier: Apache-2.0
+ from __future__ import annotations
+ 
+ """
+@@ -231,6 +233,27 @@
+         #   KV bf16: q_type = bf16, out_type=model_runner.dtype
+         #   KV fp8: q_type = fp8, out_type=model_runner.dtype
+         self.is_xqa_impl = get_platform().is_sm90 or get_platform().is_sm120
++        self._nvfp4_verify_mask = None
++        if (
++            self.is_nvfp4_kvcache
++            and self.is_xqa_impl
++            and (self.speculative_num_draft_tokens or 0) > 1
++        ):
++            q_len = self.speculative_num_draft_tokens
++            words = ((q_len + 31) // 32) * 2
++            causal_rows = [
++                [
++                    (1 << min(max(row + 1 - word * 16, 0), 16)) - 1
++                    for word in range(words)
++                ]
++                for row in range(q_len)
++            ]
++            self._nvfp4_verify_mask = (
++                torch.tensor(causal_rows, dtype=torch.uint16, device=self.device)
++                .unsqueeze(0)
++                .expand(model_runner.max_running_requests + 1, -1, -1)
++                .contiguous()
++            )
+ 
+         # fmha_v2 prefill kernel supports SM90 and SM120
+         self.use_fmha_v2 = get_platform().is_sm90 or get_platform().is_sm120
+@@ -1166,6 +1189,10 @@
+             kwargs = {}
+             if q_len_per_req != 1:
+                 kwargs["q_len_per_req"] = q_len_per_req
++                if self.is_nvfp4_kvcache and self.is_xqa_impl:
++                    assert self._nvfp4_verify_mask is not None
++                    assert q_len_per_req == self._nvfp4_verify_mask.shape[1]
++                    kwargs["mask"] = self._nvfp4_verify_mask[: group_seq_lens.shape[0]]
+             return flashinfer.decode.trtllm_batch_decode_with_kv_cache(
+                 query=group_query,
+                 kv_cache=kv_cache,
+@@ -1311,6 +1338,11 @@
+             window_left=layer.sliding_window_size,
+             sinks=attention_sink,
+             kv_cache_sf=kv_cache_block_scales,
++            q_len_per_req=(
++                self.forward_metadata.max_seq_len_q
++                if forward_batch.forward_mode.is_target_verify()
++                else 1
++            ),
+         )
+         if self.is_nvfp4_kvcache and o.dtype != self.q_data_type:
+             o = o.to(self.q_data_type)
+@@ -1328,9 +1360,22 @@
+         **kwargs,
+     ):
+         if self.decode_uses_native_fp4:
++            # Fixed-length causal verification uses the same native XQA kernel
++            # as decode, with the full proposed block already appended to KV.
++            if (
++                self.is_nvfp4_kvcache
++                and forward_batch.forward_mode.is_target_verify()
++                and layer.attn_type == AttentionType.DECODER
++                and not self.forward_metadata.is_ragged_verify
++                and get_spec().speculative_eagle_topk == 1
++                and not is_cp_active(forward_batch)
++            ):
++                return self.forward_decode(
++                    q, k, v, layer, forward_batch, save_kv_cache, **kwargs
++                )
+             raise RuntimeError(
+-                "TRTLLM MHA with native FP4 KV cache supports decode only; "
+-                "use a separate prefill backend such as flashinfer or triton."
++                "Native FP4 TRTLLM MHA requires decode or fixed-length causal "
++                "top-1 target verification; use FlashInfer for prefill."
+             )
+ 
+         cache_loc = forward_batch.out_cache_loc
+--- a/sglang/srt/layers/quantization/fp4_kv_cache_quant_method.py
++++ b/sglang/srt/layers/quantization/fp4_kv_cache_quant_method.py
+@@ -1,3 +1,5 @@
++# Modified for qwen-27b-5090-nvfp4-kv: native causal verification and fused prefill KV conversion.
++# Modifications Copyright 2026 satellitedown. SPDX-License-Identifier: Apache-2.0
+ # Copyright 2025 SGLang Team
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+@@ -266,6 +268,20 @@
+         Returns:
+             Dequantized K/V tensors with shape matching the input after unpacking.
+         """
++
++    def dequantize_prev_kv_into(
++        self, k_fp4, k_scales, v_fp4, v_scales, indices, layer_id, out_k, out_v
++    ) -> None:
++        """Gather and dequantize into caller-owned contiguous workspace."""
++        k, v = self.dequantize_prev_kv(
++            k_fp4[indices],
++            k_scales[indices],
++            v_fp4[indices],
++            v_scales[indices],
++            layer_id,
++        )
++        out_k.copy_(k)
++        out_v.copy_(v)
+ 
+     def dequantize_kv_tensor(
+         self,
+@@ -584,6 +600,23 @@
+             v_fp4.view(torch.uint8), v_scales, cur_v_scale
+         )
+         return k_bf16.to(torch.float8_e4m3fn), v_bf16.to(torch.float8_e4m3fn)
++
++    def dequantize_prev_kv_into(
++        self, k_fp4, k_scales, v_fp4, v_scales, indices, layer_id, out_k, out_v
++    ) -> None:
++        from sglang.kernels.ops.kvcache.nvfp4_dequant import gather_nvfp4_to_fp8
++
++        gather_nvfp4_to_fp8(
++            k_fp4,
++            v_fp4,
++            k_scales,
++            v_scales,
++            self.k_scales_gpu[layer_id : layer_id + 1],
++            self.v_scales_gpu[layer_id : layer_id + 1],
++            indices,
++            out_k,
++            out_v,
++        )
+ 
+     def compute_cell_size(
+         self, head_num: int, head_dim: int, num_layers: int, kv_size: int
+--- a/sglang/srt/mem_cache/memory_pool.py
++++ b/sglang/srt/mem_cache/memory_pool.py
+@@ -1,3 +1,5 @@
++# Modified for qwen-27b-5090-nvfp4-kv: native causal verification and fused prefill KV conversion.
++# Modifications Copyright 2026 satellitedown. SPDX-License-Identifier: Apache-2.0
+ """
+ Copyright 2023-2024 SGLang Team
+ Licensed under the Apache License, Version 2.0 (the "License");
+@@ -2845,15 +2847,16 @@
+ 
+             if prev_len > 0:
+                 prev_indices = req_to_token[req_idx, :prev_len]
+-                k_prev_fp8, v_prev_fp8 = self.quant_method.dequantize_prev_kv(
+-                    k_fp4[prev_indices],
+-                    k_scales[prev_indices],
+-                    v_fp4[prev_indices],
+-                    v_scales[prev_indices],
++                self.quant_method.dequantize_prev_kv_into(
++                    k_fp4,
++                    k_scales,
++                    v_fp4,
++                    v_scales,
++                    prev_indices,
+                     global_layer_id,
++                    dq_k[cur_token_idx_dq : cur_token_idx_dq + prev_len],
++                    dq_v[cur_token_idx_dq : cur_token_idx_dq + prev_len],
+                 )
+-                dq_k[cur_token_idx_dq : cur_token_idx_dq + prev_len] = k_prev_fp8
+-                dq_v[cur_token_idx_dq : cur_token_idx_dq + prev_len] = v_prev_fp8
+ 
+             if k_cur_fp8 is not None:
+                 cur_end = cur_batch_start_loc_cpu + extend_len
+--- /dev/null
++++ b/sglang/kernels/ops/kvcache/nvfp4_dequant.py
+@@ -0,0 +1,104 @@
++# Modified for qwen-27b-5090-nvfp4-kv: native causal verification and fused prefill KV conversion.
++# Modifications Copyright 2026 satellitedown. SPDX-License-Identifier: Apache-2.0
++"""Gather NVFP4 cache rows directly into the shared FP8 prefill workspace."""
++
++import torch
++import triton
++import triton.language as tl
++
++
++@triton.jit
++def _decode_e2m1(packed, column):
++    bits = (packed >> ((column & 1) * 4)) & 15
++    exponent = (bits >> 1) & 3
++    mantissa = (bits & 1).to(tl.float32)
++    power = ((exponent.to(tl.uint32) + 126) << 23).to(tl.float32, bitcast=True)
++    magnitude = tl.where(exponent == 0, mantissa * 0.5, (1.0 + mantissa * 0.5) * power)
++    signed_bits = magnitude.to(tl.uint32, bitcast=True) | (
++        (bits & 8).to(tl.uint32) << 28
++    )
++    return signed_bits.to(tl.float32, bitcast=True)
++
++
++@triton.jit
++def _to_workspace_dtype(value, DTYPE: tl.constexpr):
++    # Match FlashInfer's BF16 dequantization followed by torch's FP8 cast,
++    # including this runtime's saturating FP8 cast, without materializing BF16.
++    rounded = value.to(tl.bfloat16).to(tl.float32)
++    return rounded.to(DTYPE)
++
++
++@triton.jit
++def _gather_nvfp4_to_fp8(
++    K,
++    V,
++    KS,
++    VS,
++    KG,
++    VG,
++    INDICES,
++    OUT_K,
++    OUT_V,
++    N,
++    WIDTH: tl.constexpr,
++    BLOCK: tl.constexpr,
++):
++    offset = tl.program_id(0) * BLOCK + tl.arange(0, BLOCK)
++    row = offset // WIDTH
++    col = offset % WIDTH
++    valid = row < N
++    source = tl.load(INDICES + row, mask=valid, other=0).to(tl.int64)
++    packed_offset = source * (WIDTH // 2) + col // 2
++    scale_offset = source * (WIDTH // 16) + col // 16
++    kp = tl.load(K + packed_offset, mask=valid, other=0)
++    ks = tl.load(KS + scale_offset, mask=valid, other=0.0).to(tl.float32)
++    kval = (_decode_e2m1(kp, col) * ks) * tl.load(KG)
++    tl.store(
++        OUT_K + offset, _to_workspace_dtype(kval, OUT_K.dtype.element_ty), mask=valid
++    )
++    vp = tl.load(V + packed_offset, mask=valid, other=0)
++    vs = tl.load(VS + scale_offset, mask=valid, other=0.0).to(tl.float32)
++    vval = (_decode_e2m1(vp, col) * vs) * tl.load(VG)
++    tl.store(
++        OUT_V + offset, _to_workspace_dtype(vval, OUT_V.dtype.element_ty), mask=valid
++    )
++
++
++def gather_nvfp4_to_fp8(
++    k: torch.Tensor,
++    v: torch.Tensor,
++    k_scales: torch.Tensor,
++    v_scales: torch.Tensor,
++    k_global_scale: torch.Tensor,
++    v_global_scale: torch.Tensor,
++    indices: torch.Tensor,
++    out_k: torch.Tensor,
++    out_v: torch.Tensor,
++) -> None:
++    """Gather arbitrary cache slots, preserving BF16->FP8 rounding in-place."""
++    assert k.shape == v.shape and out_k.shape == out_v.shape
++    assert out_k.dtype == out_v.dtype == torch.float8_e4m3fn
++    assert out_k.shape == (indices.numel(), k.shape[1], k.shape[2] * 2)
++    assert all(
++        t.is_contiguous() for t in (k, v, k_scales, v_scales, indices, out_k, out_v)
++    )
++    n = indices.numel()
++    if n == 0:
++        return
++    width = k.shape[1] * k.shape[2] * 2
++    _gather_nvfp4_to_fp8[(triton.cdiv(n * width, 4096),)](
++        k,
++        v,
++        k_scales.view(torch.float8_e4m3fn),
++        v_scales.view(torch.float8_e4m3fn),
++        k_global_scale,
++        v_global_scale,
++        indices,
++        out_k,
++        out_v,
++        n,
++        WIDTH=width,
++        BLOCK=4096,
++        num_warps=8,
++        enable_fp_fusion=False,
++    )

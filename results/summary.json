@@ -1,0 +1,212 @@
+{
+  "publication": {
+    "measurement_status": "historical; not rerun for publication",
+    "redaction": "Explicit field allowlists remove raw server_info, filesystem paths, environment/configuration dumps, request IDs, weight-version identifiers and private service registration. Public model references replace local paths. Synthetic generated text, prompt hashes, stream counts, timings and numerical measurements are unchanged.",
+    "prompt_reproduction": "scripts/benchmark.py retains the original deterministic tasks, filler records, marker construction and streaming timing method; input_ids_sha256 identifies each exact token prompt."
+  },
+  "models": {
+    "target": {
+      "repository": "heswithme/Huihui-Qwen3.8-27B-Abliterated-Gittensor-Style-NVFP4-RTX5090",
+      "recipe_revision": "41c5fdfad0cbe0c784981b3e44d49c164a9bd893",
+      "weight_format": "NVFP4"
+    },
+    "draft": {
+      "repository": "incoai/Qwen3.8-27B-DFlash2",
+      "recipe_revision": "015e795645c74b1a0eeef3b570031fb62e769bc5",
+      "weight_format_at_load": "FP8"
+    },
+    "revision_note": "Revisions pin the published recipe. Historical server_info recorded target revision null and draft revision main, not immutable revisions."
+  },
+  "created_utc": "2026-09-19T21:33:09Z",
+  "updated_utc": "2026-09-19T22:03:40Z",
+  "selected_settings": {
+    "context_length": 262144,
+    "kv_cache_dtype": "nvfp4",
+    "mem_fraction_static": 0.957,
+    "max_running_requests": 1,
+    "max_total_tokens": 263168,
+    "page_size": 64,
+    "decode_attention_backend": "trtllm_mha",
+    "prefill_attention_backend": "flashinfer",
+    "speculative_algorithm": "DFLASH",
+    "speculative_num_draft_tokens": 8,
+    "speculative_dflash_block_size": 8,
+    "speculative_attention_mode": "decode",
+    "speculative_draft_kv_cache_dtype": "fp8_e4m3",
+    "max_mamba_cache_size": 4
+  },
+  "methodology": {
+    "temperature": 0,
+    "thinking": false,
+    "max_output_tokens": 1536,
+    "repeats": 2,
+    "concurrency": 1,
+    "decode_rate": "(last streamed completion count - first streamed completion count) / (last token-event time - first token-event time)",
+    "cache": "Flush before each case/depth; repetition 1 cold, subsequent repetitions warm.",
+    "filler": "Deterministic diverse synthetic operational records; exact requested token occupancy.",
+    "code_task": "Ignore the archive unless it is relevant. Write a complete Python module implementing a bounded LRU cache with TTL. Use class LRUCache(capacity, ttl, clock), with injected monotonic clock, get(key, default=None), put(key, value), and __len__. Expiry is inclusive (now >= deadline); successful get makes an entry most recent; replacing a key refreshes its TTL; expired entries must not evict live entries. Reject nonpositive capacity or TTL. Include deterministic unittest cases for expiry boundaries, LRU eviction, overwrites, and expired-entry cleanup. Return only Python code, no markdown or explanation.",
+    "recall_task": "Return only a JSON object mapping these six archive secret keys to their exact values: alder, birch, cedar, dogwood, elm, fir. Do not infer values from other records.",
+    "recall_positions": [
+      0.01,
+      0.1,
+      0.25,
+      0.5,
+      0.75,
+      0.95
+    ],
+    "caveats": "Small synthetic sample, not general accuracy equivalence or a broad coding benchmark. TPS is workload dependent. TTFT includes HTTP overhead and prompt processing.",
+    "recall_max_output_tokens": 192
+  },
+  "comparison": [
+    {
+      "prompt_tokens": 8192,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 302.68,
+      "cold_ttft_s": 0.840247,
+      "warm_ttft_s": 0.098595,
+      "recall": [
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        },
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        }
+      ],
+      "fp8_code_decode_tok_s_mean": 376.935
+    },
+    {
+      "prompt_tokens": 32768,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 340.67,
+      "cold_ttft_s": 3.994608,
+      "warm_ttft_s": 0.193982,
+      "recall": [
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        },
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        }
+      ],
+      "fp8_code_decode_tok_s_mean": 309.365
+    },
+    {
+      "prompt_tokens": 122000,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 292.05,
+      "cold_ttft_s": 33.504121,
+      "warm_ttft_s": 0.079014,
+      "recall": [
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        },
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        }
+      ],
+      "fp8_code_decode_tok_s_mean": 285.357
+    },
+    {
+      "prompt_tokens": 196608,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 291.85,
+      "cold_ttft_s": 79.695036,
+      "warm_ttft_s": 0.779673,
+      "recall": [
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        },
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        }
+      ],
+      "fp8_code_decode_tok_s_mean": null
+    },
+    {
+      "prompt_tokens": 260000,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 239.2,
+      "cold_ttft_s": 133.708633,
+      "warm_ttft_s": 0.100108,
+      "recall": [
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        },
+        {
+          "correct": 6,
+          "total": 6,
+          "all_correct": true
+        }
+      ],
+      "fp8_code_decode_tok_s_mean": null
+    }
+  ],
+  "block_sweep": {
+    "8": {
+      "prompt_tokens": 260000,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 239.2,
+      "cold_ttft_s": 133.708633,
+      "warm_ttft_s": 0.100108
+    },
+    "6": {
+      "prompt_tokens": 260000,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 220.47,
+      "cold_ttft_s": 134.910819,
+      "warm_ttft_s": 0.10083
+    },
+    "4": {
+      "prompt_tokens": 260000,
+      "code_runs": 2,
+      "code_decode_tok_s_mean": 165.12,
+      "cold_ttft_s": 135.844099,
+      "warm_ttft_s": 0.103311
+    }
+  },
+  "quality_counts": {
+    "fp8_matched_passed": 30,
+    "nvfp4_matched_passed": 27,
+    "matched_total_per_arm": 30,
+    "nvfp4_all_passed": 44,
+    "nvfp4_all_total": 50
+  },
+  "quality_caveat": "Small deterministic coding sample, not a broad quality benchmark. Three of six matched NVFP4 generations missed expired-MRU cleanup; all six FP8 generations passed all five checks. Both cache precision and attention backend change. At 260K all six recall markers passed both cold and warm runs; this does not establish general precision equivalence.",
+  "memory": {
+    "arm": "nvfp4-256k-fused-prefill",
+    "command": "nvidia-smi --query-gpu=timestamp,memory.used,memory.free,utilization.gpu,temperature.gpu,power.draw --format=csv,noheader,nounits --loop=2",
+    "sampling_seconds": 2,
+    "sampling_caveat": "Observed samples, not a guarantee of instantaneous peak usage or remaining memory under other GPU workloads.",
+    "minimum_observed_free_mib": 616,
+    "maximum_observed_temperature_c": 73,
+    "publication_note": "Aggregate sampled memory observations only; no continuous GPU telemetry log is published."
+  },
+  "comparison_note": "code_decode_tok_s_mean, cold_ttft_s, warm_ttft_s and recall refer to the NVFP4 block-8 profile; fp8_code_decode_tok_s_mean is the paired FP8 profile, null where not measured. Means cover two code runs (one cold, one warm). Both KV precision and attention backend change.",
+  "block_sweep_note": "Historical 260000-token aggregate from the original experiment summary. Block size includes the verification token (block 8 = seven draft tokens plus one verification token). Only block-8 raw timing/output runs are included in this publication; block-6 and block-4 aggregate timing claims cannot be independently recomputed from the published per-run files.",
+  "evidence": {
+    "fp8": "results/fp8.json",
+    "nvfp4": "results/nvfp4.json",
+    "quality": "results/quality.json",
+    "kernel_check": "results/kernel-check.json",
+    "benchmark": "scripts/benchmark.py"
+  },
+  "quality_reproduction": "results/quality.json preserves historical checker source, sandbox command and outcomes as inert evidence. scripts/benchmark.py performs syntax compilation only and never executes generated output; it does not reproduce behavioral quality counts. Checks for superseded arms are retained, but their generated outputs are not published here."
+}

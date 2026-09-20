@@ -1,0 +1,9 @@
+# Compiler/headers used by the measured setup, isolated from PyTorch's runtime.
+# Install with --no-deps into .cuda-toolkit; CUDA_HOME=.cuda-toolkit/nvidia/cu13.
+nvidia-cuda-nvcc==13.4.92
+nvidia-cuda-runtime==13.4.92
+nvidia-cuda-crt==13.4.92
+nvidia-cuda-cccl==13.3.4.3.1
+nvidia-nvvm==13.4.92
+nvidia-cublas==13.1.1.3
+nvidia-curand==10.4.0.35

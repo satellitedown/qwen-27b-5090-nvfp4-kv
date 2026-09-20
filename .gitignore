@@ -1,0 +1,14 @@
+.venv/
+.cuda-toolkit/
+runtime/
+models/
+runs/
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+*.safetensors
+*.bin
+*.gguf
+*.ninfer

@@ -1,0 +1,41 @@
+{
+  "description": "Hash-checked patch against the published SGLang 0.5.20 CPython 3.12 Linux x86_64 wheel.",
+  "python": "3.12",
+  "base_versions": {
+    "sglang": "0.5.20",
+    "torch": "2.13.0+cu130",
+    "flashinfer": "0.6.18"
+  },
+  "sglang_wheel": {
+    "filename": "sglang-0.5.20-cp312-cp312-manylinux_2_34_x86_64.whl",
+    "url": "https://files.pythonhosted.org/packages/34/33/a253bf07c3973f2ad0f9fec4f30f8aadf9242705dfa3e9f36f0fe9dd0b60/sglang-0.5.20-cp312-cp312-manylinux_2_34_x86_64.whl",
+    "sha256": "ffaced7e91c3536c63077b16b08210b5c1a2f362418e9841a8767d5e019cf08a"
+  },
+  "base_source_sha256": {
+    "sglang/srt/layers/attention/trtllm_mha_backend.py": "addb83dde5d3b3c6992ac09f72c49f25dd5a737cb11c7e3f7de6ec69092b9dd0",
+    "sglang/srt/layers/quantization/fp4_kv_cache_quant_method.py": "c65a9c58e1b9a7bf7750559a0e9cf4df9c9a13c1870eb6425daf0d5eea4de2d5",
+    "sglang/srt/mem_cache/memory_pool.py": "737ac340aee5a1d2a260fdf976c9023c563ca550ca1e2d47a3bbcfb674915577",
+    "sglang/kernels/ops/kvcache/nvfp4_dequant.py": null
+  },
+  "patched_source_sha256": {
+    "sglang/srt/layers/attention/trtllm_mha_backend.py": "5c79b1a3aa7a39a64b8cf1e997ce186b2b40881ff0f143575eec9addad53006d",
+    "sglang/srt/layers/quantization/fp4_kv_cache_quant_method.py": "f05c25f7d618b3dba3b458c481ab2cc9b275450c95d74db094ea9fe755625ccf",
+    "sglang/srt/mem_cache/memory_pool.py": "5f1c6a57423468ab606020e4822dab0a1e870e294c7977c0eb590946ca2280b9",
+    "sglang/kernels/ops/kvcache/nvfp4_dequant.py": "2cf6b50262a7f53a25b720dfe3da88dc623870720221d0e0c8612f9eef034dc8"
+  },
+  "patch": "patches/sglang-nvfp4-kv.patch",
+  "patch_sha256": "b43c25d20e81f8caaa94efee1aa45ac5c63496fa0c9038cb7fb8f56b038dbc72",
+  "modification_notice": "Published patch adds Apache-2.0 modification notices; functional changes match the measured local patch.",
+  "models": {
+    "target": {
+      "repo_id": "heswithme/Huihui-Qwen3.8-27B-Abliterated-Gittensor-Style-NVFP4-RTX5090",
+      "revision": "41c5fdfad0cbe0c784981b3e44d49c164a9bd893",
+      "directory": "Huihui-Qwen3.8-27B-Abliterated-Gittensor-NVFP4"
+    },
+    "draft": {
+      "repo_id": "incoai/Qwen3.8-27B-DFlash2",
+      "revision": "015e795645c74b1a0eeef3b570031fb62e769bc5",
+      "directory": "Qwen3.8-27B-DFlash2"
+    }
+  }
+}

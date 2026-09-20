@@ -1,4 +1,4 @@
-# Qwen 27B Long Context Launcher
+# Fast Long Context
 
 **Qwen3.8-27B Abliterated on a single RTX 5090 (32 GB), with 256K context at ~240-300 tokens/s.**
 
@@ -11,8 +11,8 @@ I could only reach **around 160K context** with Huihui Qwen3.8-27B (an abliterat
 You need **Linux x86_64, an RTX 5090 (32 GB), and working NVIDIA drivers**. Open a terminal and paste these commands:
 
 ```bash
-git clone https://github.com/satellitedown/qwen-27b-long-context-launcher.git
-cd qwen-27b-long-context-launcher
+git clone https://github.com/satellitedown/fast-long-context.git
+cd fast-long-context
 bash setup.sh
 ```
 
@@ -27,7 +27,15 @@ Download interrupted? Choose **2** to resume. Press **Ctrl+C** to stop the serve
 
 The launcher installs its runtime inside this folder and does not change your NVIDIA driver.
 
-## Results and limits
+## Connect to your favorite AI app
+
+Not sure how to add this to your favorite AI app or coding harness? Just ask your AI to do it. Start the server with option **3**, then copy this:
+
+> Configure my AI app to use the local OpenAI-compatible server at `http://127.0.0.1:8000/v1` with model `qwen3.8-27b-abliterated-256k`. The server is running on this computer and does not require an API key.
+
+Keep it on localhost: this server has **no authentication**.
+
+## Results
 
 | Prompt tokens | NVFP4 KV (tok/s) |
 |---:|---:|
@@ -39,7 +47,6 @@ The launcher installs its runtime inside this folder and does not change your NV
 
 - Generation only, excluding prompt processing: two-run means on a synthetic coding task, thinking disabled. Cold time to first token at 260K: **~134 s**. [Measurements](results/nvfp4.json).
 - Numerical checks, CUDA graph replay, and six-marker recall at 260K passed. [Kernel checks](results/kernel-check.json) · [Packaging verification](results/publication-smoke.json).
-- Tight VRAM headroom and errors in a small coding check—not a broad quality guarantee. One request at a time, text-only. The configured **262,144-token budget includes output**; check actual cache allocation at startup because available memory can reduce capacity.
 
 ## Why was this needed?
 
@@ -53,14 +60,6 @@ Quantized weights alone do not solve long-context memory use. The pinned **SGLan
 ## Will it work on other hardware?
 
 **NVIDIA-only, built and tested for the RTX 5090 32 GB.** Other NVIDIA GPUs are untested. **No Apple, AMD, or CPU support.**
-
-## Connect to your favorite AI app
-
-Not sure how to add this to your favorite AI app or coding harness? Just ask your AI to do it. Start the server with option **3**, then copy this:
-
-> Configure my AI app to use the local OpenAI-compatible server at `http://127.0.0.1:8000/v1` with model `qwen3.8-27b-abliterated-256k`. The server is running on this computer and does not require an API key.
-
-Keep it on localhost: this server has **no authentication**.
 
 ## Credits
 

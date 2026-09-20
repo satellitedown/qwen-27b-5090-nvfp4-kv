@@ -2,6 +2,10 @@
 
 **Qwen3.8-27B Abliterated on a single RTX 5090 (32 GB).**
 
+I could only reach **around 160K context** with Huihui Qwen3.8-27B (an abliterated model) before my RTX 5090 ran out of VRAM. The goal is to fit the full context window without giving up DFlash2 speculative decoding speed boost.
+
+**NVFP4 target weights + NVFP4 KV + a small SGLang patch** made the full **262,144-token window** possible on the same card. Tested with a 260,000-token prompt, leaving room for output. This is a runtime patch and deployment recipe, not a new model.
+
 ## Run
 
 Start with **Linux x86_64 and a working NVIDIA driver** on your RTX 5090, then open the setup menu:
@@ -23,10 +27,6 @@ Then choose **3 — Start the server**. Option **2** resumes model downloads if 
 First startup can take several minutes to compile kernels. The patch uses an isolated runtime copy, leaving global installations untouched. OpenAI-compatible endpoint: **`http://127.0.0.1:8000/v1`**, model **`qwen3.8-27b-abliterated-256k`**. No authentication: keep it on loopback. Stop with Ctrl-C.
 
 ## Why was this needed?
-
-I could only reach **around 160K context** with Huihui Qwen3.8-27B (an abliterated model) before my RTX 5090 ran out of VRAM. The goal is to fit the full context window without giving up DFlash2 speculative decoding speed boost.
-
-**NVFP4 target weights + NVFP4 KV + a small SGLang patch** made the full **262,144-token window** possible on the same card. Tested with a 260,000-token prompt, leaving room for output. This is a runtime patch and deployment recipe, not a new model.
 
 Quantized weights alone do not solve long-context memory use. The pinned **SGLang 0.5.20** runtime had two blockers:
 

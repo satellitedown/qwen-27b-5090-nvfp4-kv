@@ -27,6 +27,8 @@ cd qwen-27b-5090-nvfp4-kv
 bash setup.sh
 ```
 
+![Setup menu with install, download/resume, and start options](assets/setup-menu.png)
+
 Choose **1 — Set up everything** to install the runtime, apply the patch, and download **both the target model and DFlash2 from Hugging Face** at the pinned revisions. Expect about **22 GB of model weights**, plus runtime packages. The menu installs `uv` locally if needed and offers to install missing build tools on apt/dnf/pacman systems with your permission. It never changes your NVIDIA driver.
 
 Then choose **3 — Start the server**. Option **2** resumes model downloads if interrupted.
@@ -35,7 +37,15 @@ First startup can take several minutes to compile kernels. The patch uses an iso
 
 ## Results and limits
 
-- **~239 generated tokens/s after 260K input**, with **~134 s cold time to first token**, on a synthetic coding task: two-run mean, thinking disabled. Decode speed excludes prompt processing. [Measurements](results/nvfp4.json).
+| Prompt tokens | NVFP4 KV (tok/s) |
+|---:|---:|
+| 8,192 | 303 |
+| 32,768 | 341 |
+| 122,000 | 292 |
+| 196,608 | 292 |
+| 260,000 | 239 |
+
+- Generation only, excluding prompt processing: two-run means on a synthetic coding task, thinking disabled. Cold time to first token at 260K: **~134 s**. [Measurements](results/nvfp4.json).
 - Numerical checks, CUDA graph replay, and six-marker recall at 260K passed. [Kernel checks](results/kernel-check.json) · [Packaging verification](results/publication-smoke.json).
 - **Experimental:** tight VRAM headroom and errors in a small coding check—not a broad quality guarantee. One request at a time, text-only. The configured **262,144-token budget includes output**; check actual cache allocation at startup because available memory can reduce capacity.
 

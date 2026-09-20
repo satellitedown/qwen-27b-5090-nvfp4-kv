@@ -1,5 +1,6 @@
 .venv/
 .cuda-toolkit/
+.tools/
 runtime/
 models/
 runs/

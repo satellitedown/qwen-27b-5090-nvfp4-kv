@@ -19,15 +19,17 @@ Quantized weights alone do not solve long-context memory use. The pinned **SGLan
 
 ## Run
 
-Requires Linux x86_64, a CUDA 13-compatible NVIDIA driver, [uv](https://docs.astral.sh/uv/getting-started/installation/), Git, GNU `patch`, and a C/C++ toolchain. The installer supplies the pinned Python 3.12 environment and CUDA development packages; model downloads use pinned revisions.
+Start with **Linux x86_64 and a working NVIDIA driver** on your RTX 5090, then open the setup menu:
 
 ```bash
 git clone https://github.com/satellitedown/qwen-27b-5090-nvfp4-kv.git
 cd qwen-27b-5090-nvfp4-kv
-bash scripts/install.sh
-.venv/bin/python scripts/download_models.py
-bash scripts/serve.sh
+bash setup.sh
 ```
+
+Choose **1 — Set up everything** to install the runtime, apply the patch, and download **both the target model and DFlash2 from Hugging Face** at the pinned revisions. Expect about **22 GB of model weights**, plus runtime packages. The menu installs `uv` locally if needed and offers to install missing build tools on apt/dnf/pacman systems with your permission. It never changes your NVIDIA driver.
+
+Then choose **3 — Start the server**. Option **2** resumes model downloads if interrupted.
 
 First startup can take several minutes to compile kernels. The patch uses an isolated runtime copy, leaving global installations untouched. OpenAI-compatible endpoint: **`http://127.0.0.1:8000/v1`**, model **`qwen3.8-27b-abliterated-256k`**. No authentication: keep it on loopback. Stop with Ctrl-C.
 

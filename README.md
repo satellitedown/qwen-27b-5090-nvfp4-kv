@@ -1,8 +1,8 @@
 # Qwen 27B Long Context Launcher
 
-**Qwen3.8-27B Abliterated on a single RTX 5090 (32 GB), with 256K context at ~239 tokens/s.**
+**Qwen3.8-27B Abliterated on a single RTX 5090 (32 GB), with 256K context at ~240-300 tokens/s.**
 
-I could only reach **around 160K context** with Huihui Qwen3.8-27B (an abliterated model) before my RTX 5090 ran out of VRAM. The goal is to fit the full context window without giving up DFlash2 speculative decoding speed boost.
+I could only reach **around 160K context** with Huihui Qwen3.8-27B (an abliterated model) before my RTX 5090 ran out of VRAM. The goal/purpose of this is to fit the full context window without giving up DFlash2 speculative decoding speed boost.
 
 **NVFP4 target weights + NVFP4 KV + a small SGLang patch** made the full **262,144-token window** possible on the same card. Tested with a 260,000-token prompt, leaving room for output. This is a runtime patch and deployment recipe, not a new model.
 
